@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>නිෂ්පාදන - Agrilume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="page-header">
+        <div class="logo">Agrilume</div>
+        <nav>
+            <a href="index.html">මුල් පිටුව</a>
+            <a href="products.html" class="active">නිෂ්පාදන</a>
+            <a href="about.html">අපි ගැන</a>
+            <a href="contact.html">සම්බන්ධ වන්න</a>
+            <span id="user-status">
+                <a href="login.html">ඇතුල් වන්න</a>
+            </span>
+        </nav>
+    </header>
+
+    <main>
+        <h2>අපේ සියලුම නිෂ්පාදන</h2>
+        <div id="product-grid" class="grid-container">
+            <div class="product-card">
+                <img src="https://i.postimg.cc/k47v0vWw/pexels-photomix-company-585624.jpg" alt="කැරට්">
+                <h3>කැරට්</h3>
+                <p>නැවුම්, වස විසෙන් තොර.</p>
+                <p><strong>Available:</strong> 5 kg</p>
+                <button class="request-order-btn">Request Order</button>
+            </div>
+            <div class="product-card">
+                <img src="https://i.postimg.cc/J0B89zcf/pexels-pritam-mam-17157835.jpg" alt="බෝංචි">
+                <h3>බෝංචි</h3>
+                <p>ගුණාත්මක බවින් ඉහළයි.</p>
+                <p><strong>Available:</strong> 8 kg</p>
+                <button class="request-order-btn">Request Order</button>
+            </div>
+            <div class="product-card">
+                <img src="https://i.postimg.cc/85z11pW3/pexels-alesia-kozik-6551421.jpg" alt="තක්කාලි">
+                <h3>තක්කාලි</h3>
+                <p>වත්තේ නැවුම් අස්වැන්න.</p>
+                <p><strong>Available:</strong> 10 kg</p>
+                <button class="request-order-btn">Request Order</button>
+            </div>
+             <div class="product-card">
+                <img src="https://i.postimg.cc/kXg2mY6G/pexels-diana-light-7095400.jpg" alt="වට්ටක්කා">
+                <h3>වට්ටක්කා</h3>
+                <p>රසයෙන් අනූනයි.</p>
+                <p><strong>Available:</strong> 3 units</p>
+                <button class="request-order-btn">Request Order</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Agrilume. සියලුම හිමිකම් ඇවිරිණි.</p>
+    </footer>
+
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Request Order</h2>
+            <div id="modal-product-details">
+                </div>
+            <form id="request-form">
+                <div class="form-group">
+                    <label for="request-quantity">Enter Quantity You Need:</label>
+                    <input type="text" id="request-quantity" placeholder="e.g., 2 kg" required>
+                </div>
+                <button type="submit">Submit Request</button>
+            </form>
+            <p id="modal-message-area"></p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

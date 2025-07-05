@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Requests - Agrilume</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .container { max-width: 900px; margin: 20px auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .status-confirmed { color: #27ae60; font-weight: bold; }
+        .status-rejected { color: #c0392b; font-weight: bold; }
+        .status-pending { color: #f39c12; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Agrilume</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html">All Products</a>
+            <span id="user-status"></span>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>My Order Requests</h2>
+        <div id="my-requests-list">
+            <p>Loading your requests...</p>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/my_requests.js"></script>
+</body>
+</html>

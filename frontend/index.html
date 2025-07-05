@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrilume - නැවුම් එළවළු</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        <header class="main-header">
+            <div class="logo">Agrilume</div>
+            <nav>
+                <a href="index.html" class="active">මුල් පිටුව</a>
+                <a href="products.html">නිෂ්පාදන</a>
+                <a href="about.html">අපි ගැන</a>
+                <a href="contact.html">සම්බන්ධ වන්න</a>
+                <span id="user-status">
+                    <a href="login.html">ඇතුල් වන්න</a>
+                </span>
+            </nav>
+        </header>
+        <div class="hero-text">
+            <h1>වත්තෙන් කෙලින්ම ගෙදරට</h1>
+            <p>රසයෙන්, ගුණයෙන් සපිරි නැවුම්ම එළවළු ඔබගේ දොරකඩටම.</p>
+            <a href="products.html" class="btn-cta">දැන්ම ඇනවුම් කරන්න</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Agrilume. සියලුම හිමිකම් ඇවිරිණි.</p>
+    </footer>
+
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Request Order</h2>
+            <div id="modal-product-details">
+                </div>
+            <form id="request-form">
+                <div class="form-group">
+                    <label for="request-quantity">Enter Quantity You Need:</label>
+                    <input type="text" id="request-quantity" placeholder="e.g., 2 kg" required>
+                </div>
+                <button type="submit">Submit Request</button>
+            </form>
+            <p id="modal-message-area"></p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

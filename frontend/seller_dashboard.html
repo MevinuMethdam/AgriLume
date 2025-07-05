@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - Agrilume</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .dashboard-container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+        .form-container { flex: 1; min-width: 300px; }
+        .product-list-container { flex: 2; min-width: 400px; background-color: #fdfdfd; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .product-item:last-child { border-bottom: none; }
+        .product-details { flex-grow: 1; }
+        .product-actions button { margin-left: 5px; }
+        .requests-container { flex-basis: 100%; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .action-btn { padding: 5px 10px; border: none; border-radius: 4px; color: white; cursor: pointer; }
+        .action-btn.confirm, .action-btn.edit { background-color: #27ae60; /* Green */ }
+        .action-btn.reject { background-color: #c0392b; /* Red */ }
+        /* Modal styles from main.js can be reused or defined here */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Agrilume - Seller Dashboard</h1>
+        <nav>
+            <a href="index.html">View Main Site</a>
+            <span id="user-status"></span>
+        </nav>
+    </header>
+
+    <main class="dashboard-container">
+        <div class="form-container">
+            <h2>Add New Product</h2>
+            <form id="add-product-form">
+                <div class="form-group"><label for="name">Product Name</label><input type="text" id="name" name="name" required></div>
+                <div class="form-group"><label for="price">Price (Rs.)</label><input type="number" id="price" name="price" step="0.01" required></div>
+                <div class="form-group"><label for="quantity">Available Quantity</label><input type="text" id="quantity" name="quantity" required></div>
+                <div class="form-group"><label for="image">Product Image</label><input type="file" id="image" name="image" accept="image/*" required></div>
+                <button type="submit">Add Product</button>
+            </form>
+            <p id="message-area"></p>
+        </div>
+
+        <div class="product-list-container">
+            <h2>Your Current Products</h2>
+            <div id="product-list"><p>Loading products...</p></div>
+        </div>
+
+        <div class="requests-container">
+            <h2>Incoming Order Requests</h2>
+            <div id="incoming-requests-list"><p>Loading requests...</p></div>
+        </div>
+    </main>
+
+    <!-- Edit Product Modal -->
+    <div id="editProductModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Edit Product</h2>
+        <form id="edit-product-form">
+            <input type="hidden" id="edit-product-id">
+            <div class="form-group">
+                <label for="edit-name">Product Name</label>
+                <input type="text" id="edit-name" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-price">Price (Rs.)</label>
+                <input type="number" id="edit-price" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-quantity">Available Quantity</label>
+                <input type="text" id="edit-quantity" required>
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+        <p id="edit-message-area"></p>
+      </div>
+    </div>
+
+    <script src="js/seller.js"></script>
+</body>
+</html>
