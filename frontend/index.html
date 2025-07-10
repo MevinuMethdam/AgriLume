@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agrilume - ගොවිපලෙන් නැවුම්ව</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   <style>
     * {
@@ -20,7 +21,6 @@
 
     body {
       font-family: 'Noto Sans Sinhala', sans-serif;
-      /* THIS IS THE FINAL, UPDATED BACKGROUND IMAGE URL AS PER YOUR DESCRIPTION */
       background-image: url('https://images.pexels.com/photos/4033321/pexels-photo-4033321.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
       background-size: cover;
       background-position: center;
@@ -55,7 +55,6 @@
       -webkit-backdrop-filter: blur(12px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.25);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transition: 0.3s ease;
     }
 
     .logo {
@@ -84,6 +83,11 @@
       font-weight: 700;
       color: #2E7D32;
     }
+    
+    nav {
+        display: flex;
+        align-items: center;
+    }
 
     nav a {
       margin-left: 10px;
@@ -100,6 +104,44 @@
     nav a:hover {
       color: #fff;
       background: #D97706;
+    }
+    
+    nav a.active {
+        background: #B45309; 
+        color: #fff;
+    }
+    
+    /* Styles for the dynamic user status area */
+    #user-status {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-left: 10px;
+    }
+    .welcome-text {
+        color: #D97706; /* New, prominent orange color */
+        font-weight: bold;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 10px 18px;
+        border-radius: 20px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    #user-status a.logout-btn {
+        background-color: #c0392b;
+    }
+    #user-status a.logout-btn:hover {
+        background-color: #a93226;
+    }
+    #user-status a.login-btn {
+        background: transparent;
+        border: 2px solid #D97706;
+        color: #D97706;
+        font-weight: bold;
+    }
+    #user-status a.login-btn:hover {
+        background: #D97706;
+        color: #fff;
     }
 
     .hero-section {
@@ -156,7 +198,6 @@
       transform: scale(1.05);
     }
     
-    /* NEW STYLES FOR CONTENT SECTIONS */
     .content-section {
         padding: 80px 20px;
     }
@@ -184,7 +225,6 @@
         color: #3E2723;
     }
     
-    /* Process Steps Styles */
     .process-steps {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -212,7 +252,6 @@
         line-height: 1.6;
     }
     
-    /* Products Grid Styles */
     .product-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -277,23 +316,30 @@
       padding: 20px;
       font-size: 14px;
     }
+    
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(30px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
 
+    @media (max-width: 992px) {
+        nav { flex-direction: column; align-items: flex-end; }
+        nav > div, nav > span { margin-left: 0; margin-bottom: 10px; }
+    }
     @media (max-width: 768px) {
       header {
         flex-direction: column;
       }
-
+      nav { align-items: center; }
       .logo-container {
         margin-bottom: 15px;
       }
-      nav a {
-        padding: 8px 12px;
-        font-size: 14px;
+      nav > div, nav > span {
+        margin-bottom: 10px;
       }
       .hero-content h1 {
         font-size: 36px;
       }
-
       .hero-content p {
         font-size: 18px;
       }
@@ -308,16 +354,21 @@
 
   <header>
     <div class="logo-container">
-      <a href="#" class="logo">
+      <a href="index.html" class="logo">
         <div class="logo-icon"></div>
         <div class="logo-text">Agri<span>Lume</span></div>
       </a>
     </div>
     <nav>
-      <a href="#">මුල් පිටුව</a>
-      <a href="#">නිෂ්පාදන</a>
-      <a href="#">අපි ගැන</a>
-      <a href="#">සම්බන්ධ වන්න</a>
+      <div id="public-nav-links">
+        <a href="index.html" class="active">මුල් පිටුව</a>
+        <a href="products.html">නිෂ්පාදන</a>
+        <a href="about.html">අපි ගැන</a>
+        <a href="contact.html">සම්බන්ධ වන්න</a>
+      </div>
+      <span id="user-status">
+        <a href="login.html" class="login-btn">ඇතුල් වන්න</a>
+      </span>
     </nav>
   </header>
 
@@ -333,7 +384,6 @@
       <div class="content-container">
           <h2>ගුණාත්මකභාවය වැවෙන තැන, Agrilume</h2>
           <p>නැවුම් බවේ සැබෑ අරුත කුමක්ද? එය, සුපිරි වෙළඳසැලේ රාක්කයක දිලිසෙන එළවළුවක්ද? නැතහොත්, සරුසාර පසකින්, ස්වභාවික ක්‍රමවේදයන්ට අනුව, ඉවසීමෙන් සහ ආදරයෙන් වගා කර, නෙළාගත් මොහොතේ සුවඳ විහිදුවන අස්වැන්නක්ද?</p>
-          <p>Agrilume හි අපි විශ්වාස කරන්නේ දෙවැනි පිළිතුරයි. අපගේ ගොවිපල යනු හුදෙක් ඉඩමක් නොවේ; එය ගුණාත්මකභාවය, විශ්වාසය සහ සොබාදහමට ඇති ගෞරවය අප වගා කරන තැනයි. වෙළඳපොලේ කෘත්‍රිම ක්‍රමවේදයන්ගෙන් මිදී, පසට සලකමින්, හිරු එළියෙන් සහ පිරිසිදු ජලයෙන් පෝෂණය ලබන, නිරෝගී සහ රසවත් අස්වැන්නක් ඔබට ලබාදීම අපගේ එකම කැපවීමයි.</p>
           <p>Agrilume යනු අතරමැදියන්ගෙන් තොර, ගොවිපලේ සිට ඔබේ මුළුතැන්ගෙට දිවෙන විශ්වාසයේ පාලමකි. ඒ නැවුම් බවේ වෙනස ඔබටත් අදම අත්විඳින්නට අපෙන් ආරාධනා!</p>
       </div>
   </section>
@@ -357,7 +407,7 @@
             </div>
             <div class="step">
                 <h3>පියවර 4: විශ්වාසයේ ගනුදෙනුව</h3>
-                <p>භාණ්ඩවල නැවුම් බව ඔබම පරීක්ෂා කර බලා, භාණ්ඩ ලැබුණු පසුව මුදල් ගෙවීමේ විශ්වාසනීය පහසුකම භුක්ති විඳින්න.</p>
+                <p>භාණ්ඩවල නැවුම් බව ඔබම පරීක්ෂා කර බලා, භාණ්ඩ ලැබුණු පසුව මුදල් ගෙවීමේ විශ්වාසනීය පහසුකම භුති විඳින්න.</p>
             </div>
         </div>
     </div>
@@ -438,6 +488,7 @@
                   </div>
               </div>
 
+
           </div>
       </div>
   </section>
@@ -447,11 +498,59 @@
   </footer>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userStatusSpan = document.getElementById('user-status');
+        const publicNavLinks = document.getElementById('public-nav-links');
+        
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (user && userStatusSpan && publicNavLinks) {
+            // --- User is Logged In ---
+
+            // 1. Hide public navigation links
+            publicNavLinks.style.display = 'none';
+
+            // 2. Clear the 'Login' button area
+            userStatusSpan.innerHTML = ''; 
+
+            // 3. Create and add new links for the logged-in user
+            const welcomeText = document.createElement('span');
+            welcomeText.className = 'welcome-text';
+            welcomeText.textContent = `Welcome, ${user.name || 'User'}`; 
+
+            const myRequestsLink = document.createElement('a');
+            myRequestsLink.href = 'my_requests.html';
+            myRequestsLink.textContent = 'My Requests';
+
+            const messagesLink = document.createElement('a');
+            messagesLink.href = 'messages.html';
+            messagesLink.textContent = 'Messages';
+
+            const logoutButton = document.createElement('a');
+            logoutButton.href = '#'; 
+            logoutButton.textContent = 'Logout';
+            logoutButton.className = 'logout-btn';
+
+            logoutButton.onclick = function() {
+                localStorage.removeItem('user'); 
+                window.location.href = 'index.html'; 
+            };
+
+            // Add the new elements to the navigation bar
+            userStatusSpan.appendChild(welcomeText);
+            userStatusSpan.appendChild(myRequestsLink);
+            userStatusSpan.appendChild(messagesLink);
+            userStatusSpan.appendChild(logoutButton);
+
+        }
+    });
+  </script>
+
+  <script>
     window.addEventListener("scroll", function () {
       document.querySelector("header").classList.toggle("scrolled", window.scrollY > 50);
     });
   </script>
 
 </body>
-
 </html>

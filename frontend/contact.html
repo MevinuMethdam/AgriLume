@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>සම්බන්ධ වන්න - Agrilume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans Sinhala', sans-serif;
+      background-image: url('https://images.pexels.com/photos/4033321/pexels-photo-4033321.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-color: #e0f7fa;
+      color: #3E2723;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: background 0.3s;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+    
+    .logo-container {
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 15px;
+      height: 25px;
+      background-color: #2E7D32;
+      border-radius: 0 50% 0 50%;
+      transform: rotate(45deg);
+    }
+
+    .logo-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 24px;
+      color: #3E2723;
+      font-weight: 400;
+    }
+
+    .logo-text span {
+      font-weight: 700;
+      color: #2E7D32;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+    }
+    nav a {
+      margin-left: 10px;
+      color: #F8F9FA;
+      background: rgba(46, 125, 50, 0.55);
+      padding: 10px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+      backdrop-filter: blur(5px);
+    }
+
+    nav a:hover {
+      color: #fff;
+      background: #D97706;
+    }
+    
+    nav a.active {
+        background: #B45309; 
+        color: #fff;
+    }
+    
+    #user-status {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-left: 10px;
+    }
+    .welcome-text {
+        color: #D97706; /* UPDATED: Prominent orange color */
+        font-weight: bold;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 10px 18px;
+        border-radius: 20px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    #user-status a.logout-btn {
+        background-color: #c0392b;
+    }
+    #user-status a.logout-btn:hover {
+        background-color: #a93226;
+    }
+    #user-status a.login-btn {
+        background: transparent;
+        border: 2px solid #D97706;
+        color: #D97706;
+        font-weight: bold;
+    }
+    #user-status a.login-btn:hover {
+        background: #D97706;
+        color: #fff;
+    }
+    
+    .page-header {
+        padding: 120px 20px;
+        text-align: center;
+        background: rgba(0,0,0,0.5);
+    }
+
+    .page-header h1 {
+        font-size: 48px;
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .content-section {
+        padding: 80px 20px;
+    }
+    
+    .contact-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
+    }
+
+    .contact-layout {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 50px;
+    }
+    
+    .contact-details h2, .contact-form h2 {
+        font-size: 36px;
+        color: #2E7D32;
+        margin-bottom: 30px;
+        font-weight: 700;
+        text-align: left;
+    }
+    
+    .contact-info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+        font-size: 18px;
+        text-align: left;
+    }
+    .contact-info-item i {
+        font-size: 24px;
+        color: #D97706;
+        width: 40px;
+        text-align: center;
+        margin-right: 15px;
+    }
+    .contact-info-item a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s;
+    }
+    .contact-info-item a:hover {
+        color: #D97706;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #3E2723;
+        text-align: left;
+    }
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-family: 'Noto Sans Sinhala', sans-serif;
+        font-size: 16px;
+        background: rgba(255,255,255,0.5);
+    }
+    
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: #D97706;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      text-decoration: none;
+      transition: 0.3s;
+      box-shadow: 0 4px 20px rgba(217, 119, 6, 0.5);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-submit:hover {
+      background: #B45309;
+    }
+
+    .btn-submit:disabled {
+        background: #999;
+        cursor: not-allowed;
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.6);
+      color: #3E2723;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 992px) {
+        .contact-layout {
+            grid-template-columns: 1fr;
+        }
+        nav { flex-direction: column; align-items: flex-end; }
+        nav > div, nav > span { margin-left: 0; margin-bottom: 10px; }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+      }
+      nav { align-items: center; }
+      .logo-container { margin-bottom: 15px; }
+      nav > div, nav > span { margin-bottom: 10px; }
+      .page-header h1 { font-size: 36px; }
+      .contact-details h2, .contact-form h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"></div>
+        <div class="logo-text">Agri<span>Lume</span></div>
+      </a>
+    </div>
+    <nav>
+      <div id="public-nav-links">
+        <a href="index.html">මුල් පිටුව</a>
+        <a href="products.html">නිෂ්පාදන</a>
+        <a href="about.html">අපි ගැන</a>
+        <a href="contact.html" class="active">සම්බන්ධ වන්න</a>
+      </div>
+      <span id="user-status">
+        <a href="login.html" class="login-btn">ඇතුල් වන්න</a>
+      </span>
+    </nav>
+  </header>
+  
+  <main>
+
+    <section class="page-header">
+        <h1>අපව සම්බන්ධ කරගන්න</h1>
+    </section>
+
+    <section class="content-section">
+        <div class="contact-wrapper">
+            <div class="contact-layout">
+                
+                <div class="contact-details">
+                    <h2>තොරතුරු</h2>
+                    <p style="margin-bottom: 40px; text-align: left;">ඔබගේ ඇනවුම් හෝ ඕනෑම විමසීමක් සඳහා පහත ක්‍රම ඔස්සේ අප හා සම්බන්ධ වන්න. ඔබගේ ඇමතුම අපට මහත් අගනේය.</p>
+                    
+                    <div class="contact-info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <a href="tel:+94742232490">+94742232490</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/94742232490" target="_blank">+94742232490</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:mevinumethdam@yahoo.com">mevinumethdam@yahoo.com</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Agrilume ගොවිපළ, බුලන්කුලම, අනුරාධපුරය.</span>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>සඳුදා - සෙනසුරාදා | පෙ.ව. 8:00 - ප.ව. 6:00</span>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h2>පණිවිඩයක් එවන්න</h2>
+                    <form id="contact-form" action="https://formspree.io/f/xeokbnlz" method="POST">
+                        <div class="form-group">
+                            <label for="name">නම</label>
+                            <input type="text" id="name" name="name" placeholder="ඔබගේ නම" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">විද්‍යුත් තැපෑල</label>
+                            <input type="email" id="email" name="email" placeholder="ඔබගේ විද්‍යුත් තැපෑල" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">විෂය</label>
+                            <input type="text" id="subject" name="subject" placeholder="කරුණ කුමක්ද?">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">පණිවිඩය</label>
+                            <textarea id="message" name="message" rows="5" placeholder="ඔබගේ පණිවිඩය මෙහි ලියන්න" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">පණිවිඩය යවන්න</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Agrilume. සියලු හිමිකම් ඇවිරිණි.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Form Submission Fix ---
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(event) {
+                event.stopImmediatePropagation();
+                const submitButton = contactForm.querySelector('.btn-submit');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'පණිවිඩය යවමින් පවතී...';
+                }
+            }, true);
+        }
+
+        // --- Dynamic Navigation Bar Logic ---
+        const userStatusSpan = document.getElementById('user-status');
+        const publicNavLinks = document.getElementById('public-nav-links');
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (user && userStatusSpan && publicNavLinks) {
+            publicNavLinks.style.display = 'none';
+            userStatusSpan.innerHTML = ''; 
+
+            const welcomeText = document.createElement('span');
+            welcomeText.className = 'welcome-text';
+            welcomeText.textContent = `Welcome, ${user.name || 'User'}`; 
+
+            const myRequestsLink = document.createElement('a');
+            myRequestsLink.href = 'my_requests.html';
+            myRequestsLink.textContent = 'My Requests';
+
+            const messagesLink = document.createElement('a');
+            messagesLink.href = 'messages.html';
+            messagesLink.textContent = 'Messages';
+
+            const logoutButton = document.createElement('a');
+            logoutButton.href = '#'; 
+            logoutButton.textContent = 'Logout';
+            logoutButton.className = 'logout-btn';
+
+            logoutButton.onclick = function() {
+                localStorage.removeItem('user'); 
+                window.location.href = 'index.html'; 
+            };
+
+            userStatusSpan.appendChild(welcomeText);
+            userStatusSpan.appendChild(myRequestsLink);
+            userStatusSpan.appendChild(messagesLink);
+            userStatusSpan.appendChild(logoutButton);
+        }
+    });
+  </script>
+
+</body>
+</html>
