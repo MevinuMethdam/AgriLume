@@ -1,231 +1,239 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Agrilume</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Agrilume</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet"/>
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Noto Sans Sinhala', sans-serif;
-            height: 100%;
-            overflow: hidden;
-        }
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans Sinhala', sans-serif;
+      height: 100%;
+    }
 
-        #login-video-bg {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100vw;
-            min-height: 100vh;
-            z-index: -2;
-            object-fit: cover;
-        }
+    #login-video-bg {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      z-index: -2;
+      object-fit: cover;
+    }
 
-        .video-overlay-dark {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
-        }
+    .video-overlay-dark {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
 
-        /* === Water Bubble / Glassmorphism Effect === */
-        .form-container {
-            position: relative;
-            z-index: 1;
-            width: 90%;
-            max-width: 400px;
-            margin: 60px auto;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
+    .login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-            position: relative; /* <-- NEW: Added for icon positioning */
-        }
+    .form-container {
+      width: 90%;
+      max-width: 400px;
+      padding: 40px;
+      padding-bottom: 60px; /* extra bottom space */
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
 
-        /* --- Styling for elements inside the bubble --- */
+    .form-group {
+      margin-bottom: 20px;
+    }
 
-        label, h2, p {
-            text-align: center;
-            color: #ffffff;
-            text-shadow: 0 0 5px rgba(0,0,0,0.4);
-        }
-        
-        label {
-            display: block;
-            text-align: left;
-            margin-bottom: 8px;
-            font-weight: bold;
-            /* */
-            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7); /* Increased shadow for better readability */
-            /* */
-        }
+    label, h2, p {
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    }
 
-        p a {
-            color: #d1eaff;
-            font-weight: bold;
-        }
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 8px;
+      font-weight: bold;
+      text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+    }
 
-        input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 1em;
-        }
+    p a {
+      color: #d1eaff;
+      font-weight: bold;
+    }
 
-        /* */
-        input[type="password"] {
-            /* Add padding to the right to make space for the icon */
-            padding-right: 45px; 
-        }
+    .input-wrapper {
+      position: relative;
+    }
 
-        .toggle-password-icon {
-    position: absolute;
-    right: 15px;
-    bottom: 11px;  /* input එකේ පහළ සිට 11px ඉහළින් ස්ථානගත කරන්න */
-    cursor: pointer;
-    z-index: 2;
-}
-        .toggle-password-icon svg {
-             width: 20px;
-             height: 20px;
-             fill: rgba(255, 255, 255, 0.7);
-        }
-        /* */
+    .input-wrapper input {
+      width: 100%;
+      padding: 12px 45px 12px 12px;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 1em;
+    }
 
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
+    .input-wrapper input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
 
-        input:focus {
-            outline: none;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.3);
-        }
+    .input-wrapper input:focus {
+      outline: none;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.3);
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #2E7D32;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 8px;
-            font-size: 1.1em;
-            transition: background-color 0.3s ease;
-        }
+    .toggle-password-icon,
+    .input-icon-placeholder {
+      position: absolute;
+      right: 15px;
+      bottom: 11px;
+      cursor: pointer;
+      z-index: 2;
+    }
 
-        button:hover {
-            background-color: #388E3C;
-        }
-        
-        .or-divider {
-            text-align: center; 
-            margin: 25px 0; 
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-    </style>
+    .input-icon-placeholder {
+      opacity: 0;
+      pointer-events: none;
+      width: 20px;
+      height: 20px;
+    }
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    .toggle-password-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #ffffff;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2E7D32;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 8px;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #388E3C;
+    }
+
+    .or-divider {
+      text-align: center;
+      margin: 25px 0;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
+
 <body>
+  <video autoplay muted loop id="login-video-bg">
+    <source src="/frontend/videos/login-bg.mp4" type="video/mp4"/>
+    Your browser does not support the video tag.
+  </video>
+  <div class="video-overlay-dark"></div>
 
-    <video autoplay muted loop id="login-video-bg">
-      <source src="/frontend/videos/login-bg.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <div class="video-overlay-dark"></div>
-
+  <div class="login-wrapper">
     <main class="form-container">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <a href="index.html" style="text-decoration: none; color: #FFFFFF; font-size: 2.8em; font-weight: bold; text-shadow: 0 0 8px rgba(0,0,0,0.5);">Agrilume</a>
-        </div>
-        
-        <h2>Login to Your Account</h2>
-        <form id="login-form">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <a href="index.html" style="text-decoration: none; color: #FFFFFF; font-size: 2.8em; font-weight: bold; text-shadow: 0 0 8px rgba(0,0,0,0.5);">Agrilume</a>
+      </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-                <span id="togglePassword" class="toggle-password-icon">
-                    </span>
-            </div>
-            <button type="submit">Login</button>
-        </form>
-        <p id="message-area"></p>
-        
-        <div class="or-divider">OR</div>
-
-        <div style="display: flex; justify-content: center;">
-            <div id="g_id_onload"
-                 data-client_id="138005063161-92qou3eaj7netnggmv5t8i9k6vj1gq91.apps.googleusercontent.com"
-                 data-context="signin"
-                 data-ux_mode="popup"
-                 data-callback="handleCredentialResponse"
-                 data-auto_prompt="false">
-            </div>
-            
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-shape="rectangular"
-                 data-theme="outline"
-                 data-text="signin_with"
-                 data-size="large"
-                 data-logo_alignment="left">
-            </div>
+      <h2>Login to Your Account</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrapper">
+            <input type="email" id="email" name="email" required/>
+            <span class="input-icon-placeholder"></span>
+          </div>
         </div>
-        
-        <p style="margin-top: 25px;">Don't have an account? <a href="register.html">Register now</a></p>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="password" name="password" required/>
+            <span id="togglePassword" class="toggle-password-icon"></span>
+          </div>
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <p id="message-area"></p>
+
+      <div class="or-divider">OR</div>
+
+      <div style="display: flex; justify-content: center;">
+        <div id="g_id_onload"
+             data-client_id="138005063161-92qou3eaj7netnggmv5t8i9k6vj1gq91.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="rectangular"
+             data-theme="outline"
+             data-text="signin_with"
+             data-size="large"
+             data-logo_alignment="left">
+        </div>
+      </div>
+
+      <p style="margin-top: 25px;">Don't have an account? <a href="register.html">Register now</a></p>
     </main>
+  </div>
 
-    <script src="js/auth.js"></script>
+  <script src="js/auth.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const togglePassword = document.querySelector('#togglePassword');
-            const passwordInput = document.querySelector('#password');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const togglePassword = document.querySelector('#togglePassword');
+      const passwordInput = document.querySelector('#password');
 
-            // SVG icons for eye and eye-slash
-            const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
-            const eyeSlashIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .68l2.21 2.21C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L21.73 22 23 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>`;
-            
-            // Set the initial icon
-            togglePassword.innerHTML = eyeIcon;
+      const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
+      const eyeSlashIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-4 .68l2.21 2.21C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L21.73 22 23 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>`;
 
-            togglePassword.addEventListener('click', function () {
-                // Toggle the type attribute of the password input
-                const isPassword = passwordInput.getAttribute('type') === 'password';
-                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+      togglePassword.innerHTML = eyeIcon;
 
-                // Toggle the icon
-                this.innerHTML = isPassword ? eyeSlashIcon : eyeIcon;
-            });
-        });
-    </script>
-    </body>
+      togglePassword.addEventListener('click', function () {
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        this.innerHTML = isPassword ? eyeSlashIcon : eyeIcon;
+      });
+    });
+  </script>
+</body>
 </html>
