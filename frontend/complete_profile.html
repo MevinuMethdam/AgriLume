@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile - Agrilume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans Sinhala', sans-serif;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 15px;
+            background-color: #f0f0f0; 
+        }
+
+        #login-video-bg {
+            position: fixed;
+            right: 0; bottom: 0;
+            min-width: 100vw; min-height: 100vh;
+            z-index: -2; object-fit: cover;
+        }
+
+        .video-overlay-dark {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        .form-container {
+            position: relative; z-index: 1;
+            width: 100%; max-width: 450px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        label, h2, p {
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        input[type="tel"], textarea {
+            width: 100%; padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1em;
+            font-family: 'Noto Sans Sinhala', sans-serif;
+            box-sizing: border-box; 
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        button[type="submit"] {
+            width: 100%; padding: 12px;
+            background-color: #2E7D32; 
+            color: white; border: none;
+            cursor: pointer; font-weight: bold;
+            border-radius: 8px; font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button[type="submit"]:hover {
+            background-color: #388E3C;
+        }
+        button:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+
+        #message-area {
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 1.2em; 
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease, bottom 0.5s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-family: 'Noto Sans Sinhala', sans-serif;
+        }
+        .notification.show {
+            opacity: 1;
+            bottom: 40px;
+        }
+        .notification.success { background-color: #27ae60; }
+        .notification.error { background-color: #c0392b; }
+
+    </style>
+</head>
+<body>
+
+<video autoplay muted loop id="login-video-bg">
+    <source src="/frontend/videos/login-bg.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+<div class="video-overlay-dark"></div>
+
+<main class="form-container">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="text-decoration: none; color: #FFFFFF; font-size: 2.8em; font-weight: bold; text-shadow: 0 0 8px rgba(0,0,0,0.5);">Agrilume</h1>
+    </div>
+
+    <h2>Complete Your Profile</h2>
+    <p style="margin-bottom: 20px;">Please provide your phone number and address to continue.</p>
+
+    <form id="complete-profile-form">
+        <div class="form-group">
+            <label for="phone_number">Phone Number</label>
+            <input type="tel" id="phone_number" name="phone_number"
+                   required
+                   pattern="[0-9]{10}"
+                   title="Phone number must be exactly 10 digits (e.g., 0712345678)"
+                   minlength="10"
+                   maxlength="10"
+                   placeholder="Enter 10 digit phone number">
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <textarea id="address" name="address" required placeholder="Enter your full address"></textarea>
+        </div>
+        <button type="submit">Update Profile</button>
+    </form>
+    <p id="message-area"></p> </main>
+
+<script src="js/complete_profile.js"></script>
+
+</body>
+</html>

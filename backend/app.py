@@ -12,14 +12,12 @@ from google.auth.transport import requests as google_requests
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-# Define the upload folder and allowed extensions
 UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5500"}}, supports_credentials=True)
 
-# --- Configuration ---
 app.config['SECRET_KEY'] = 'a_very_secret_and_secure_key_change_it'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'instance', 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -27,22 +25,16 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db.init_app(app)
 
-# Helper function to check for allowed file types
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# === User Helper Function ===
 def user_to_dict(user):
     return {
         'id': user.id, 'full_name': user.full_name, 'email': user.email,
         'phone_number': user.phone_number, 'address': user.address,
         'gender': user.gender, 'is_seller': user.is_seller
     }
-
-# ===============================================
-# ===         AUTHENTICATION ROUTES           ===
-# ===============================================
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -72,20 +64,20 @@ def google_login():
     data = request.get_json()
     token = data.get('token')
     try:
-        # IMPORTANT: Replace this with your actual Google Client ID
+        # actual Google Client ID
         CLIENT_ID = "138005063161-92qou3eaj7netnggmv5t8i9k6vj1gq91.apps.googleusercontent.com"
         idinfo = id_token.verify_oauth2_token(token, google_requests.Request(), CLIENT_ID)
         google_email = idinfo['email']
         user = User.query.filter_by(email=google_email).first()
         if not user:
-            # Create a new user if they don't exist
+            
             new_user = User(
                 full_name=idinfo.get('name', 'N/A'),
                 email=google_email,
-                phone_number="0000000000", # Placeholder
-                address="Not Provided",    # Placeholder
-                gender="Not Provided",     # Placeholder
-                password=generate_password_hash(os.urandom(16).hex()) # Secure random password
+                phone_number="0000000000", 
+                address="Not Provided",    
+                gender="Not Provided",     
+                password=generate_password_hash(os.urandom(16).hex())
             )
             db.session.add(new_user)
             db.session.commit()
@@ -109,17 +101,31 @@ def check_session():
             return jsonify({'logged_in': True, 'user': user_to_dict(user)}), 200
     return jsonify({'logged_in': False}), 200
 
-# ===============================================
-# ===           PRODUCT ROUTES                ===
-# ===============================================
-
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/api/products', methods=['GET'])
 def get_products():
-    products = Product.query.order_by(Product.updated_at.desc()).all()
+    
+    current_user_id = session.get('user_id')
+    print("--- 1: GET /api/products route A request was received ---")
+    if current_user_id:
+        current_user = User.query.get(current_user_id)
+        print(f"--- 2: A user is logged in.: {current_user.full_name}, Seller ?: {current_user.is_seller} ---")
+        if current_user and current_user.is_seller:
+            print("--- 3: As a seller, only his products are offered ---")
+            
+            products = Product.query.filter_by(seller_id=current_user_id).order_by(Product.updated_at.desc()).all()
+        else:
+            print("--- 3: As a buyer, all products are provided ---")
+            
+            products = Product.query.order_by(Product.updated_at.desc()).all()
+    else:
+        print("--- 2: No one is logged in. All products are provided---")
+        
+        products = Product.query.order_by(Product.updated_at.desc()).all()
+    print(f"--- 4: Products from the database {len(products)} Found ---")
     product_list = []
     for p in products:
         image_url = f"http://127.0.0.1:5000/uploads/{p.image_url}" if p.image_url else None
@@ -129,7 +135,6 @@ def get_products():
         })
     return jsonify(product_list)
 
-# --- NEWLY ADDED ROUTE ---
 @app.route('/api/product/<int:product_id>', methods=['GET'])
 def get_product(product_id):
     product = Product.query.get(product_id)
@@ -152,13 +157,22 @@ def add_product():
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     user = User.query.get(session['user_id'])
     if not user or not user.is_seller: return jsonify({'message': 'Not authorized.'}), 403
+    
     if 'image' not in request.files: return jsonify({'message': 'No image file part.'}), 400
     file = request.files['image']
     if file.filename == '': return jsonify({'message': 'No selected file.'}), 400
+    
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        new_product = Product(name=request.form['name'], price=float(request.form['price']), quantity=request.form['quantity'], image_url=filename)
+        
+        new_product = Product(
+            name=request.form['name'], 
+            price=float(request.form['price']), 
+            quantity=request.form['quantity'], 
+            image_url=filename,
+            seller_id=user.id 
+        )
         db.session.add(new_product)
         db.session.commit()
         return jsonify({'message': f"Product '{request.form['name']}' added."}), 201
@@ -169,12 +183,18 @@ def update_product(product_id):
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     user = User.query.get(session['user_id'])
     if not user or not user.is_seller: return jsonify({'message': 'Not authorized.'}), 403
+    
     product_to_update = Product.query.get(product_id)
     if not product_to_update: return jsonify({'message': 'Product not found.'}), 404
+
+    if product_to_update.seller_id != user.id:
+        return jsonify({'message': 'Not authorized to modify this product.'}), 403
+
     data = request.get_json()
     if 'name' in data: product_to_update.name = data['name']
     if 'price' in data: product_to_update.price = float(data['price'])
     if 'quantity' in data: product_to_update.quantity = data['quantity']
+    
     db.session.commit()
     return jsonify({'message': 'Product updated successfully.'}), 200
 
@@ -183,8 +203,13 @@ def delete_product(product_id):
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     user = User.query.get(session['user_id'])
     if not user or not user.is_seller: return jsonify({'message': 'Not authorized.'}), 403
+    
     product_to_delete = Product.query.get(product_id)
     if not product_to_delete: return jsonify({'message': 'Product not found.'}), 404
+
+    if product_to_delete.seller_id != user.id:
+        return jsonify({'message': 'Not authorized to delete this product.'}), 403
+
     if product_to_delete.image_url:
         try:
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], product_to_delete.image_url))
@@ -194,15 +219,21 @@ def delete_product(product_id):
     db.session.commit()
     return jsonify({'message': 'Product deleted successfully.'}), 200
 
-# ===============================================
-# ===           REQUEST ROUTES                ===
-# ===============================================
-
 @app.route('/api/requests/add', methods=['POST'])
 def add_request():
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
+    user = User.query.get(session['user_id'])
+    
+    if user and user.is_seller:
+        return jsonify({'message': 'Sellers cannot make requests.'}), 403
+
     data = request.get_json()
     if not all(k in data for k in ['product_id', 'quantity']): return jsonify({'message': 'Missing data.'}), 400
+    
+    product = Product.query.get(data['product_id'])
+    if not product:
+        return jsonify({'message': 'Product not found.'}), 404
+    
     new_request = Request(user_id=session['user_id'], product_id=data['product_id'], requested_quantity=data['quantity'])
     db.session.add(new_request)
     db.session.commit()
@@ -213,16 +244,46 @@ def get_requests():
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     user = User.query.get(session['user_id'])
     if not user or not user.is_seller: return jsonify({'message': 'Not authorized.'}), 403
-    requests = db.session.query(Request, User, Product).join(User, Request.user_id == User.id).join(Product, Request.product_id == Product.id).order_by(Request.requested_at.desc()).all()
-    request_list = [{'request_id': req.id, 'buyer_name': buyer.full_name, 'buyer_contact': buyer.phone_number, 'product_name': product.name, 'requested_quantity': req.requested_quantity, 'status': req.status, 'requested_at': req.requested_at.isoformat()} for req, buyer, product in requests]
+    
+    requests = db.session.query(Request, User, Product)\
+                         .join(User, Request.user_id == User.id)\
+                         .join(Product, Request.product_id == Product.id)\
+                         .filter(Product.seller_id == user.id)\
+                         .order_by(Request.requested_at.desc()).all()
+    
+    request_list = []
+    for req, buyer, product in requests:
+        request_list.append({
+            'request_id': req.id, 
+            'buyer_name': buyer.full_name, 
+            'buyer_contact': buyer.phone_number, 
+            'product_name': product.name, 
+            'requested_quantity': req.requested_quantity, 
+            'status': req.status, 
+            'requested_at': req.requested_at.isoformat(),
+            'product_image_url': f"http://127.0.0.1:5000/uploads/{product.image_url}" if product.image_url else None
+        })
     return jsonify(request_list)
 
 @app.route('/api/myrequests', methods=['GET'])
 def get_my_requests():
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     user_id = session['user_id']
-    requests = db.session.query(Request, Product).join(Product, Request.product_id == Product.id).filter(Request.user_id == user_id).order_by(Request.requested_at.desc()).all()
-    request_list = [{'product_name': product.name, 'requested_quantity': req.requested_quantity, 'status': req.status, 'requested_at': req.requested_at.isoformat()} for req, product in requests]
+    requests = db.session.query(Request, Product)\
+                         .join(Product, Request.product_id == Product.id)\
+                         .filter(Request.user_id == user_id)\
+                         .order_by(Request.requested_at.desc()).all()
+    
+    request_list = []
+    for req, product in requests:
+        request_list.append({
+            'request_id': req.id, 
+            'product_name': product.name, 
+            'requested_quantity': req.requested_quantity, 
+            'status': req.status, 
+            'requested_at': req.requested_at.isoformat(),
+            'product_image_url': f"http://127.0.0.1:5000/uploads/{product.image_url}" if product.image_url else None
+        })
     return jsonify(request_list)
 
 @app.route('/api/requests/update/<int:request_id>', methods=['POST'])
@@ -230,24 +291,63 @@ def update_request_status(request_id):
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     user = User.query.get(session['user_id'])
     if not user or not user.is_seller: return jsonify({'message': 'Not authorized.'}), 403
+    
     req_to_update = Request.query.get(request_id)
     if not req_to_update: return jsonify({'message': 'Request not found.'}), 404
+
+    product_of_request = Product.query.get(req_to_update.product_id)
+    if not product_of_request or product_of_request.seller_id != user.id:
+        return jsonify({'message': 'Not authorized to update this request.'}), 403
+
     data = request.get_json()
     new_status = data.get('status')
-    if new_status not in ['Confirmed', 'Rejected', 'Shipped']: return jsonify({'message': 'Invalid status.'}), 400
+    if new_status not in ['Confirmed', 'Rejected', 'Shipped']: 
+        return jsonify({'message': 'Invalid status.'}), 400
+    
+    if new_status == 'Confirmed' and req_to_update.status != 'Confirmed': 
+        try:
+            
+            current_product_quantity_val = float(''.join(filter(str.isdigit or str == '.', product_of_request.quantity)))
+            requested_quantity_val = float(''.join(filter(str.isdigit or str == '.', req_to_update.requested_quantity)))
+            
+            if current_product_quantity_val < requested_quantity_val:
+                return jsonify({'message': 'Requested quantity exceeds available product quantity.'}), 400
+            
+            new_product_quantity_val = current_product_quantity_val - requested_quantity_val
+            product_of_request.quantity = f"{new_product_quantity_val} {product_of_request.quantity.split(' ')[1]}" if ' ' in product_of_request.quantity else str(new_product_quantity_val) # Preserve unit if present
+            db.session.add(product_of_request) 
+
+        except ValueError:
+            
+            print(f"Warning: Could not parse quantity for product {product_of_request.id} or request {req_to_update.id}. Skipping quantity update.")
+            pass 
+
     req_to_update.status = new_status
     db.session.commit()
-    return jsonify({'message': f'Request {request_id} updated.'}), 200
-
-# ===============================================
-# ===           MESSAGING ROUTES              ===
-# ===============================================
+    return jsonify({'message': f'Request {request_id} updated to {new_status}.'}), 200
 
 @app.route('/api/messages/conversations', methods=['GET'])
 def get_conversations():
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     user = User.query.get(session['user_id'])
-    convo_users = User.query.filter_by(is_seller=False).all() if user.is_seller else User.query.filter_by(is_seller=True).all()
+    
+    if user.is_seller:
+        
+        buyers_who_requested_my_products = db.session.query(Request.user_id)\
+                                                   .join(Product, Request.product_id == Product.id)\
+                                                   .filter(Product.seller_id == user.id)\
+                                                   .distinct().all()
+        buyer_ids = [b[0] for b in buyers_who_requested_my_products]
+        convo_users = User.query.filter(User.id.in_(buyer_ids)).all()
+    else:
+        
+        sellers_of_my_requests = db.session.query(Product.seller_id)\
+                                          .join(Request, Product.id == Request.product_id)\
+                                          .filter(Request.user_id == user.id)\
+                                          .distinct().all()
+        seller_ids = [s[0] for s in sellers_of_my_requests]
+        convo_users = User.query.filter(User.id.in_(seller_ids)).all()
+
     return jsonify([user_to_dict(u) for u in convo_users])
 
 @app.route('/api/messages/history/<int:other_user_id>', methods=['GET'])
@@ -258,11 +358,46 @@ def get_message_history(other_user_id):
     message_list = [{'id': msg.id, 'sender_id': msg.sender_id, 'content': msg.content, 'timestamp': msg.timestamp.isoformat()} for msg in messages]
     return jsonify(message_list)
 
+@app.route('/api/update-profile', methods=['PUT'])
+def update_profile():
+    if 'user_id' not in session:
+        return jsonify({'message': 'Please log in to update your profile.'}), 401
+
+    user_id = session['user_id']
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found.'}), 404
+
+    data = request.get_json()
+    updated = False
+
+    if 'phone_number' in data and data['phone_number'] and data['phone_number'] != user.phone_number:
+        user.phone_number = data['phone_number']
+        updated = True
+
+    if 'address' in data and data['address'] and data['address'] != user.address:
+        user.address = data['address']
+        updated = True
+
+    if updated:
+        db.session.commit()
+        
+        return jsonify({'message': 'Profile updated successfully!', 'user': user_to_dict(user)}), 200
+    else:
+        return jsonify({'message': 'No changes detected.'}), 200
+    
 @app.route('/api/messages/send', methods=['POST'])
 def send_message():
     if 'user_id' not in session: return jsonify({'message': 'Please log in.'}), 401
     data = request.get_json()
     if not all(k in data for k in ['receiver_id', 'content']): return jsonify({'message': 'Missing data.'}), 400
+    
+    sender_user = User.query.get(session['user_id'])
+    receiver_user = User.query.get(data['receiver_id'])
+
+    if not sender_user or not receiver_user:
+        return jsonify({'message': 'Invalid sender or receiver.'}), 400
+    
     new_message = Message(sender_id=session['user_id'], receiver_id=data['receiver_id'], content=data['content'])
     db.session.add(new_message)
     db.session.commit()

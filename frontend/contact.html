@@ -114,7 +114,7 @@
         margin-left: 10px;
     }
     .welcome-text {
-        color: #D97706; /* UPDATED: Prominent orange color */
+        color: #D97706; 
         font-weight: bold;
         font-size: 16px;
         background: rgba(255, 255, 255, 0.8);
@@ -368,7 +368,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- Form Submission Fix ---
+      
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
             contactForm.addEventListener('submit', function(event) {
@@ -381,7 +381,6 @@
             }, true);
         }
 
-        // --- Dynamic Navigation Bar Logic ---
         const userStatusSpan = document.getElementById('user-status');
         const publicNavLinks = document.getElementById('public-nav-links');
         const user = JSON.parse(localStorage.getItem('user'));
