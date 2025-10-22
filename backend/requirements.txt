@@ -3,3 +3,6 @@ Flask-SQLAlchemy
 Flask-Login
 Flask-Cors
 google-auth
+Flask-SocketIO
+gevent-websocket
+requests

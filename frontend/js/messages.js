@@ -1,7 +1,7 @@
 // This script should only run on messages.html
 document.addEventListener('DOMContentLoaded', () => {
     if (!document.querySelector('.messaging-wrapper')) {
-        return; // Exit if this is not the messages page
+        return; 
     }
 
     const BACKEND_URL = 'http://127.0.0.1:5000';
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const avatar = document.createElement('div');
                 avatar.className = 'avatar';
-                avatar.textContent = user.full_name.charAt(0).toUpperCase(); // First letter for avatar
+                avatar.textContent = user.full_name.charAt(0).toUpperCase(); 
 
                 const nameDiv = document.createElement('div');
                 nameDiv.className = 'user-name';
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activeConversationUserId = otherUserId;
         chatHeaderDiv.textContent = `Chat with ${otherUserName}`;
         messageForm.style.display = 'flex';
-        if(noChatPlaceholder) noChatPlaceholder.style.display = 'none'; // Hide placeholder
+        if(noChatPlaceholder) noChatPlaceholder.style.display = 'none'; 
         messagesAreaDiv.innerHTML = '<p style="text-align:center; color: #868e96;">Loading messages...</p>';
 
         document.querySelectorAll('.conversation-item').forEach(item => {
@@ -82,12 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(`${BACKEND_URL}/api/messages/history/${otherUserId}`, { credentials: 'include' });
             const messages = await response.json();
-            messagesAreaDiv.innerHTML = ''; // Clear loading text
+            messagesAreaDiv.innerHTML = ''; 
             if(messages.length === 0) {
                  messagesAreaDiv.innerHTML = '<p style="text-align:center; color: #868e96;">No messages yet. Say hello!</p>';
             } else {
                 messages.forEach(msg => {
-                    appendMessage(msg.content, msg.sender_id === currentUserId, false); // Don't animate history
+                    appendMessage(msg.content, msg.sender_id === currentUserId, false); 
                 });
             }
             scrollToBottom();
@@ -118,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const content = messageInput.value.trim();
             if (!content || !activeConversationUserId) return;
 
-            // If it's the first message, clear the "No messages yet" text
             if(messagesAreaDiv.querySelector('p')) {
                 messagesAreaDiv.innerHTML = '';
             }

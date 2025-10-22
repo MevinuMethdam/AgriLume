@@ -9,28 +9,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- General Reset & Box Sizing --- */
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* --- Body & Layout (Using Flexbox for Centering) --- */
+        
         body, html {
             font-family: 'Noto Sans Sinhala', sans-serif;
             width: 100%;
         }
         
         body {
-            display: flex; /* Use flexbox for easy centering */
-            justify-content: center; /* Horizontally center the content */
-            align-items: center; /* Vertically center the content */
-            min-height: 100vh; /* Ensure body takes full viewport height */
-            padding: 40px 15px; /* Add vertical and horizontal padding */
+            display: flex; 
+            justify-content: center;
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 40px 15px; 
         }
 
-        /* --- Background Video & Overlay --- */
         #login-video-bg {
             position: fixed;
             right: 0;
@@ -51,7 +50,6 @@
             z-index: -1;
         }
         
-        /* --- Glassmorphism Form Container --- */
         .form-container {
             position: relative;
             z-index: 1;
@@ -64,11 +62,10 @@
             -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.18);
-            max-height: 90vh; /* Allow max height */
-            overflow-y: auto; /* Add scrollbar if content overflows */
+            max-height: 90vh; 
+            overflow-y: auto; 
         }
 
-        /* --- Custom Scrollbar --- */
         .form-container::-webkit-scrollbar {
             width: 8px;
         }
@@ -81,7 +78,6 @@
             border-radius: 10px;
         }
 
-        /* --- Text & Links --- */
         label, h2, p, footer {
             text-align: center;
             color: #ffffff;
@@ -104,7 +100,6 @@
             text-decoration: underline;
         }
 
-        /* --- Form Elements --- */
         .form-group {
             margin-bottom: 15px;
             position: relative;
@@ -131,22 +126,21 @@
             min-height: 80px;
         }
 
-        /* --- UPDATED SELECT ELEMENT STYLES --- */
+    
         select {
-            -webkit-appearance: none; /* Remove default browser arrow */
+            -webkit-appearance: none; 
             -moz-appearance: none;
             appearance: none;
-            /* Add custom arrow */
+        
             background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="white" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
             background-repeat: no-repeat;
             background-position: right 15px center;
             background-size: 12px;
         }
         
-        /* Style for the dropdown options list */
         select option {
-            background: rgba(40, 40, 40, 0.95); /* Dark background for options */
-            color: #ffffff; /* White text for options */
+            background: rgba(40, 40, 40, 0.95); 
+            color: #ffffff; 
         }
 
         input:focus, select:focus, textarea:focus {
@@ -169,7 +163,6 @@
             fill: rgba(255, 255, 255, 0.7);
         }
 
-        /* --- Buttons & Dividers --- */
         button[type="submit"] {
             width: 100%;
             padding: 12px;
@@ -193,7 +186,6 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
-        /* --- Footer --- */
         footer {
             margin-top: 30px;
             padding-top: 20px;
@@ -220,43 +212,47 @@
 
     <h2>Create Your Account</h2>
     <form id="register-form">
-        <div class="form-group">
-            <label for="full_name">Full Name</label>
-            <input type="text" id="full_name" name="full_name" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="phone_number">Phone Number</label>
-            <input type="tel" id="phone_number" name="phone_number" required>
-        </div>
-        <div class="form-group">
-            <label for="address">Address</label>
-            <textarea id="address" name="address" required></textarea>
-        </div>
-        <div class="form-group">
-            <label for="gender">Gender</label>
-            <select id="gender" name="gender" required>
-                <option value="" style="color: #999;">--Choose--</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required minlength="6">
-            <span class="toggle-password-icon" data-target="password"></span>
-        </div>
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
-            <span class="toggle-password-icon" data-target="confirm_password"></span>
-        </div>
-        <button type="submit">Create Account</button>
-    </form>
-    <p id="message-area" style="color: #ffcdd2; text-align: center; margin-top: 15px;"></p>
+    <div class="form-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <input type="tel" id="phone_number" name="phone_number"
+               required
+               pattern="[0-9]{10}"
+               title="Phone number must be exactly 10 digits (e.g., 0712345678)"
+               minlength="10"
+               maxlength="10">
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" required>
+            <option value="" disabled selected style="color: #999;">--Choose--</option> <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required minlength="6">
+        <span class="toggle-password-icon" data-target="password"></span>
+    </div>
+    <div class="form-group">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
+        <span class="toggle-password-icon" data-target="confirm_password"></span>
+    </div>
+    <button type="submit">Create Account</button>
+</form>
+<p id="message-area" style="color: #ffcdd2; text-align: center; margin-top: 15px; font-weight: bold;"></p>
 
     <div class="or-divider">OR</div>
 
