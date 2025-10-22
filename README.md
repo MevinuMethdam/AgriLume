@@ -43,8 +43,8 @@ Agrilume is a full-stack web application designed to allow farmers to sell their
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [Your Repository URL]
-    cd [Project Folder Name]
+    git clone https://github.com/MevinuMethdam/AgriLume.git
+    cd AgriLume
     ```
 2.  **Backend Setup:**
     ```bash
